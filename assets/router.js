@@ -1,7 +1,8 @@
 // Used by 404.html on lenovo.thinkpad.fi and ibm.thinkpad.fi.
 // /T460p  -> /t460p/   (case fix, if the model exists here)
-// unknown -> https://thinkpad.fi/<id>  (the main site knows both brands and redirects to the right one)
+// unknown -> thinkpad.fi/<id>  (the main site knows both brands and redirects to the right one)
 (function () {
+  var TP = window.TP;
   var all = window.THINKPAD || {};
   var key = Object.keys(all)[0];
   var D = all[key];
@@ -11,7 +12,7 @@
   function notFound() {
     var msg = document.getElementById("msg");
     msg.innerHTML = '<h1>Page not found</h1><p>No ThinkPad called <b></b> here.</p>' +
-      '<p><a class="btn" href="/">' + (D ? D.site.name : "Home") + '</a><a class="btn ghost" href="https://thinkpad.fi/">thinkpad.fi</a></p>';
+      '<p><a class="btn" href="/">' + (D ? D.site.name : "Home") + '</a><a class="btn ghost" href="' + TP.url("") + '">thinkpad.fi</a></p>';
     msg.querySelector("b").textContent = seg;
   }
 
@@ -19,6 +20,6 @@
   if (!D) { notFound(); return; }
   var own = D.models.some(function (m) { return m.id === seg; });
   if (own && !tried) { location.replace("/" + seg + "/?r=1"); return; }
-  if (!own && !tried) { location.replace("https://thinkpad.fi/" + encodeURIComponent(seg)); return; }
+  if (!own && !tried) { location.replace(TP.url("", "/" + encodeURIComponent(seg))); return; }
   notFound();
 })();
