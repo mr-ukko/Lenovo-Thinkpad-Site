@@ -34,12 +34,14 @@
 
   function mount(active) {
     var app = document.getElementById("app");
+    var apexUrl = window.TP ? window.TP.url("") : S.main;   // local dev server aware, falls back to production
     var h = el("header", "site-header");
-    h.innerHTML = '<div class="wrap"><a class="brand" href="' + root + '">Think<b>Pad</b><span class="era">' + esc(S.label) + "</span></a>" +
+    h.innerHTML = '<div class="wrap"><a class="brand" href="' + esc(apexUrl) + '" title="thinkpad.fi">Think<b>Pad</b><span class="era">' + esc(S.label) + "</span></a>" +
       '<nav class="nav"><a href="' + root + '"' + (active === "home" ? ' class="active"' : "") + '>Home</a>' +
       '<a href="' + root + '#models">Models</a>' +
       '<a href="' + esc(S.other.url) + '">' + esc(S.other.name) + "</a>" +
-      '<a href="' + esc(S.main) + '">thinkpad.fi</a></nav></div>';
+      (window.TP && window.TP.tools ? window.TP.tools.map(function (t) { return '<a class="ext" href="' + esc(t.url) + '" target="_blank" rel="noopener">' + esc(t.name) + "</a>"; }).join("") : "") +
+      "</nav></div>";
     document.body.insertBefore(h, app);
     var f = el("footer", "site-footer");
     f.innerHTML = '<div class="wrap">© ' + new Date().getFullYear() + " thinkpad.fi. Fan-made, not affiliated with Lenovo or IBM.</div>";
